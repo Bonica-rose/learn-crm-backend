@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require("cors");
 
 const connectDB = require('./config/database')
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ connectDB()
 app.get('/', (req, res) => { 
     res.send('<h1>Backend application for a Customer Relationship Management (CRM) application using the MERN Stack</h1>')
 })
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
