@@ -2,8 +2,9 @@ const express = require('express');
 require("dotenv").config();
 const cors = require("cors");
 
-const connectDB = require('./config/database')
+const connectDB = require('./config/database');
 const authRoutes = require("./routes/authRoutes");
+const customerRoutes = require("./routes/customerRoutes");
 
 const app = express();
 
@@ -13,21 +14,22 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-    origin:allowedOrigins,
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
-}))
-app.use(express.json())
+}));
+app.use(express.json());
 
 
-connectDB()
+connectDB();
 app.get('/', (req, res) => { 
     res.send('<h1>Backend application for a Customer Relationship Management (CRM) application using the MERN Stack</h1>')
 })
 app.use("/api/auth", authRoutes);
+app.use("/api/customers", customerRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is listening to the port ${PORT}`);
-    console.log(`http://localhost:${PORT}`);  
-})
+    console.log(`http://localhost:${PORT}`);
+});
