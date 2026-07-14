@@ -53,10 +53,19 @@ const login = async (req, res) => {
             });
         }
 
+        // Generate JWT token
+        const token = generateToken(user);
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // true in production with HTTPS
+            sameSite: "Strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
         res.json({
             success: true,
-            message: "Login successful",
-            token: generateToken(user), // Generate JWT token
+            message: "Login successful",            
             user: {
                 id: user._id,
                 name: user.name,
