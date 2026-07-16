@@ -63,7 +63,7 @@ const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        res.json({
+        res.status(200).json({
             success: true,
             message: "Login successful",            
             user: {
@@ -81,8 +81,21 @@ const login = async (req, res) => {
     }
 };
 
+const logout = (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict"
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully"
+    });
+};
+
 const getMe = async (req, res) => {
-    res.json({
+    res.status(200).json({
         success: true,
         user: req.user
     });
