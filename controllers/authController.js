@@ -13,10 +13,21 @@ const register = async (req, res) => {
             });
         }
 
+        // Check if this is the very first user in the database
+        const isFirstUser = (await User.countDocuments({})) === 0;
+
+        // Set the role dynamically based on the count
+        const role = isFirstUser ? "Admin" : "Staff";
+
+        // Set the job title dynamically based on the count
+        const jobTitle = isFirstUser ? "Administrator" : "Sales Executive";
+
         await User.create({
             name,
             email,
-            password
+            password,
+            role,
+            job_title:jobTitle
         });
 
         res.status(201).json({
@@ -60,7 +71,7 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // true in production with HTTPS
             sameSite: "Strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000
         });
 
         res.status(200).json({
@@ -69,7 +80,9 @@ const login = async (req, res) => {
             user: {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role: user.role,
+                position: user.job_title
             }
         });
 
@@ -104,5 +117,6 @@ const getMe = async (req, res) => {
 module.exports = {
     register,
     login,
+    logout,
     getMe
 };

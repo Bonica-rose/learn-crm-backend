@@ -25,7 +25,19 @@ const userSchema = new mongoose.Schema(
             required: [true, "Password is required"],
             minlength: 6,
             select: false // Hide password by default
-        }
+        },
+
+        role: {
+            type: String,
+            enum: ["Admin", "Staff"],
+            default: "Staff"
+        },
+
+        job_title: {
+            type: String,
+            trim: true,
+            default: "Sales Executive"
+        },
     },
     {
         timestamps: true
