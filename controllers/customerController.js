@@ -28,7 +28,7 @@ const getCustomers = async (req, res) => {
             .sort({ createdAt: -1 })
             .select("-__v -createdAt -updatedAt");
 
-        res.json({
+        res.status(200).json({
             success: true,
             count: customers.length,
             customerDataList: customers
@@ -59,7 +59,7 @@ const getCustomer = async (req, res) => {
             });
         }
 
-        res.json({
+        res.status(200).json({
             success: true,
             customer
         });
@@ -93,7 +93,7 @@ const updateCustomer = async (req, res) => {
             });
         }
 
-        res.json({
+        res.status(200).json({
             success: true,
             customer
         });
@@ -120,7 +120,7 @@ const deleteCustomer = async (req, res) => {
             });
         }
 
-        res.json({
+        res.status(200).json({
             success: true,
             message: "Customer deleted successfully"
         });
