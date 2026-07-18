@@ -135,10 +135,119 @@ const deleteCustomer = async (req, res) => {
     }
 };
 
+// For Admin
+const getAllCustomers = async (req, res) => {
+    try {
+        const customers = await Customer
+            .find({})
+            .populate("createdBy", "name email role")
+            .sort({ createdAt: -1 })
+            .select("-__v -createdAt -updatedAt");
+
+        res.status(200).json({
+            success: true,
+            count: customers.length,
+            customerDataList: customers
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+const getCustomerForAdmin = async (req, res) => {
+    try {
+        const customer = await Customer
+            .findOne({
+                _id: req.params.id
+            })
+            .populate("createdBy", "name email")
+            .select("-__v -createdAt -updatedAt");
+
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: "Customer not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            customer
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+const updateCustomerForAdmin = async (req, res) => {
+    try {
+        const customer = await Customer.findOneAndUpdate(
+            {
+                _id: req.params.id
+            },
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate("createdBy", "name email").select("-__v -createdAt");
+
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: "Customer not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Customer updated successfully",
+            customer
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+const deleteCustomerForAdmin = async (req, res) => {
+    try {
+        const customer = await Customer.findOneAndDelete({
+            _id: req.params.id
+        });
+
+        if (!customer) {
+            return res.status(404).json({
+                success: false,
+                message: "Customer not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Customer deleted successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
-    createCustomer,
-    getCustomers,
-    getCustomer,
-    updateCustomer,
-    deleteCustomer
+    createCustomer, getCustomers, getCustomer, updateCustomer, deleteCustomer,
+    getAllCustomers, getCustomerForAdmin, updateCustomerForAdmin, deleteCustomerForAdmin
 };

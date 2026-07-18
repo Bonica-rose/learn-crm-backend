@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require('./config/database');
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require('./routes/adminRoutes');
 const customerRoutes = require("./routes/customerRoutes");
 const dashboardRoutes = require('./routes/dashboardRoutes');
 
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Backend application for a Customer Relationship Management (CRM) application using the MERN Stack</h1>')
 })
 app.use("/api/auth", authRoutes);
+app.use("/api/admin/customers", adminRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
