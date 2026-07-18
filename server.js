@@ -10,6 +10,9 @@ const adminRoutes = require('./routes/adminRoutes');
 const customerRoutes = require("./routes/customerRoutes");
 const dashboardRoutes = require('./routes/dashboardRoutes');
 
+const errorHandler = require('./middlewares/errorHandler')
+const notFound = require('./middlewares/notFound')
+
 const app = express();
 
 const allowedOrigins = [
@@ -35,6 +38,9 @@ app.use("/api/admin/customers", adminRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

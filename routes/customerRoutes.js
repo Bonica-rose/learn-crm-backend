@@ -3,6 +3,8 @@ const router = express.Router();
 
 const protect = require("../middlewares/authenticate");
 const access = require("../middlewares/authorize");
+const validationCheck = require('../middlewares/validation');
+const customerValidator = require("../validators/customerValidator");
 
 const {
     createCustomer,
@@ -14,10 +16,10 @@ const {
 
 router.use(protect);
 
-router.post("/", access("Admin","Staff"), createCustomer);
+router.post("/", access("Admin","Staff"), customerValidator, validationCheck, createCustomer);
 router.get("/", access("Staff"), getCustomers);
 router.get("/:id", access("Staff"), getCustomer);
-router.put("/:id", access("Staff"), updateCustomer);
+router.put("/:id", access("Staff"), customerValidator, validationCheck, updateCustomer);
 router.delete("/:id", access("Staff"), deleteCustomer);
 
 module.exports = router;
