@@ -5,10 +5,11 @@ const createCustomer = async (req, res) => {
         const customer = await Customer.create({
             ...req.body,
             createdBy: req.user._id
-        }).select("-__v -updatedAt");
+        });
 
         res.status(201).json({
             success: true,
+            message: "Customer added successfully",
             customer
         });
 
@@ -95,6 +96,7 @@ const updateCustomer = async (req, res) => {
 
         res.status(200).json({
             success: true,
+            message: "Customer updated successfully",
             customer
         });
 
